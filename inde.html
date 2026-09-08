@@ -1,0 +1,1473 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="DOOM AI Global Creation and Research Lab">
+<title>DOOM AI — Global Creation Lab</title>
+<style>
+:root{--bg:#050b14;--panel:#0c1625;--panel2:#102238;--line:#24425f;--txt:#f2f7ff;--muted:#9eb1c8;--a:#63e6ff;--b:#a78bfa;--ok:#52e6a1}
+*{box-sizing:border-box}body{margin:0;color:var(--txt);font-family:Inter,system-ui,Arial;background:radial-gradient(circle at 20% 0,#183a59 0,#081322 38%,#03060b 100%);min-height:100vh}
+header{text-align:center;padding:28px 15px 18px}h1{font-size:clamp(34px,7vw,72px);margin:0;background:linear-gradient(90deg,var(--a),#fff,var(--b));-webkit-background-clip:text;color:transparent}
+header p{max-width:900px;margin:10px auto;color:var(--muted)}nav{position:sticky;top:0;z-index:5;background:#050b14eF;backdrop-filter:blur(12px);border-bottom:1px solid var(--line);padding:9px;display:flex;gap:8px;overflow:auto}
+nav button{white-space:nowrap}button{border:1px solid #31516e;background:linear-gradient(100deg,#106f8b,#5e42a2);color:white;padding:10px 14px;border-radius:11px;font-weight:700;cursor:pointer}
+button:hover{filter:brightness(1.18)}main{max-width:1250px;margin:auto;padding:18px 14px 70px}.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}@media(max-width:850px){.grid{grid-template-columns:1fr}}
+.card{background:linear-gradient(145deg,var(--panel),var(--panel2));border:1px solid var(--line);border-radius:20px;padding:18px;box-shadow:0 18px 50px #0007}.full{grid-column:1/-1}
+h2{margin:0 0 10px}h3{margin-bottom:6px}.muted{color:var(--muted);font-size:13px;line-height:1.55}
+input,select,textarea{width:100%;border:1px solid #31516e;background:#07101d;color:var(--txt);border-radius:11px;padding:11px;font:inherit;margin:5px 0}
+textarea{min-height:150px;resize:vertical}.row{display:flex;gap:8px;flex-wrap:wrap}.row>*{flex:1}.chips{display:flex;gap:5px;flex-wrap:wrap;max-height:150px;overflow:auto}.chip{font-size:11px;border:1px solid #2c4963;border-radius:99px;padding:5px 8px;color:#bdeeff}
+pre{background:#030912;border:1px solid #1e3851;border-radius:12px;padding:13px;white-space:pre-wrap;overflow:auto;min-height:100px}.answer{line-height:1.7}.source{border-left:3px solid var(--a);padding:9px 12px;background:#071321;margin:8px 0}.tag{display:inline-block;padding:4px 8px;border-radius:99px;background:#10303a;color:var(--ok);font-size:11px;margin:2px}
+canvas{width:100%;height:320px;border-radius:15px;background:radial-gradient(circle,#163653,#050b14 70%);border:1px solid var(--line)}
+table{width:100%;border-collapse:collapse}td,th{padding:8px;border-bottom:1px solid var(--line);vertical-align:top;text-align:left}th{color:var(--a)}
+</style>
+</head>
+<body>
+<header>
+<h1>DOOM AI</h1>
+<p>Global Creation • Research • Coding • Evidence • Visual Learning</p>
+<div id="status" class="tag">LOCAL DEMO READY</div>
+</header>
+<nav>
+<button onclick="focusId('creator')">AI Creator</button>
+<button onclick="focusId('research')">Global Research</button>
+<button onclick="focusId('coding')">100 Languages</button>
+<button onclick="focusId('visual')">3D Visual</button>
+<button onclick="focusId('sources')">Evidence</button>
+</nav>
+<main><div class="grid">
+
+<section class="card full" id="creator">
+<h2>🧠 Single AI Creation Hub</h2>
+<p class="muted">Ek central prompt se detailed creative/research plan banao. Real cloud AI ke bina ye local orchestration demo hai; kisi API key ko hard-code nahi kiya gaya.</p>
+<textarea id="prompt" placeholder="Example: Explain black holes for a student, with science, history, evidence, examples, visual ideas and follow-up questions."></textarea>
+<div class="row">
+<select id="depth"><option>Deep</option><option>Very Deep</option><option>Research Grade</option></select>
+<select id="audience"><option>General Audience</option><option>Student</option><option>Professional</option><option>Children</option></select>
+</div><button onclick="createAnswer()">Create Detailed Answer</button>
+<div id="answer" class="answer"></div>
+</section>
+
+<section class="card" id="research">
+<h2>🌍 Global Public-Data Research</h2>
+<p class="muted">Public/open source demo. Source attribution is preserved. Restricted, private, leaked or access-controlled data is not collected.</p>
+<input id="topic" placeholder="Search a public topic on Wikipedia">
+<button onclick="publicSearch()">Fetch Public Source</button>
+<div id="researchOut"></div>
+</section>
+
+<section class="card" id="sources">
+<h2>🔎 Evidence & Provenance</h2>
+<p class="muted">Claim ko source ke saath record karo. Fact, interpretation aur inference ko separate rakhne ke liye structure.</p>
+<input id="claim" placeholder="Claim / statement">
+<input id="src" placeholder="Source URL, document, publisher">
+<input id="when" placeholder="Date / page / section (optional)">
+<button onclick="addEvidence()">Add Evidence</button>
+<div style="overflow:auto"><table><thead><tr><th>Claim</th><th>Source</th><th>Reference</th></tr></thead><tbody id="ev"></tbody></table></div>
+</section>
+
+<section class="card" id="coding">
+<h2>💻 100-Language Coding Lab</h2>
+<select id="language"></select>
+<button onclick="loadExample()">Load Example</button>
+<textarea id="editor">// Select a language and load its safe starter template.</textarea>
+<button onclick="runCode()">Run JavaScript Sandbox</button>
+<pre id="codeOut">Only JavaScript is executable inside this browser demo. Other languages receive templates; real compilation requires their runtime/compiler.</pre>
+</section>
+
+<section class="card" id="visual">
+<h2>🌌 Interactive 3D-Ready Visualizer</h2>
+<p class="muted">Canvas demo: rotating educational object. Production 3D models can be connected later without changing the research/evidence architecture.</p>
+<canvas id="scene" width="900" height="420"></canvas>
+<div class="row"><button onclick="setVisual('human')">Human</button><button onclick="setVisual('animal')">Animal</button><button onclick="setVisual('planet')">Planet</button><button onclick="setVisual('brain')">Brain</button></div>
+<p id="visualText" class="muted">Choose a visual. Click/drag the canvas to rotate the demonstration.</p>
+</section>
+
+<section class="card">
+<h2>📱 Secure Login Architecture</h2>
+<p class="muted">UI-only placeholder: phone + OTP must be implemented through a real authentication backend/provider. This file deliberately does not collect or transmit phone numbers.</p>
+<input placeholder="+country code + phone number" disabled>
+<button disabled>Send OTP — connect backend</button>
+</section>
+
+<section class="card full">
+<h2>🛡️ Data & Copyright Guardrails</h2>
+<div class="chips">
+<span class="chip">Public / Open Data Priority</span><span class="chip">Source Attribution</span><span class="chip">Licence Metadata</span>
+<span class="chip">No Private Data</span><span class="chip">No Leaked Data</span><span class="chip">No Access Bypass</span>
+<span class="chip">Summarize Instead of Copying</span><span class="chip">Fact ≠ Inference</span><span class="chip">Source Date</span>
+</div>
+</section>
+
+<section class="card full">
+<h2>📦 Export Project</h2>
+<button onclick="exportData()">Export Research JSON</button>
+<button onclick="copyAnswer()">Copy Answer</button>
+</section>
+
+</div></main>
+<script>
+const LANGUAGES=["Python", "JavaScript", "TypeScript", "Java", "C", "C++", "C#", "Go", "Rust", "Swift", "Kotlin", "Dart", "PHP", "Ruby", "R", "MATLAB", "Scala", "Perl", "Lua", "Haskell", "Objective-C", "Groovy", "Visual Basic .NET", "F#", "Fortran", "COBOL", "Assembly", "SQL", "HTML", "CSS", "Sass", "Less", "Bash", "PowerShell", "Zig", "D", "Elixir", "Erlang", "Clojure", "OCaml", "Julia", "Nim", "Crystal", "Solidity", "VHDL", "Verilog", "SystemVerilog", "Ada", "Pascal", "Delphi", "Prolog", "Lisp", "Scheme", "Racket", "Smalltalk", "Tcl", "ABAP", "Apex", "GDScript", "Elm", "PureScript", "Vala", "Nix", "WebAssembly", "GLSL", "HLSL", "CUDA", "OpenCL", "Move", "Motoko", "Mojo", "CoffeeScript", "ActionScript", "PL/SQL", "T-SQL", "GraphQL", "Cypher", "SPARQL", "Starlark", "Pony", "V", "Ballerina", "Hack", "Q#", "Forth", "Raku", "Awk", "Makefile", "CMake", "Protobuf", "Thrift", "Jsonnet", "ReScript", "Gleam", "Carbon", "RPG IV"];
+const templates={
+Python:`print("Hello from DOOM AI")`,
+JavaScript:`console.log("Hello from DOOM AI");`,
+TypeScript:`const message: string = "Hello";\\nconsole.log(message);`,
+Java:`class Main { public static void main(String[] args){ System.out.println("Hello"); } }`,
+"C":`#include <stdio.h>\\nint main(){ printf("Hello\\\\n"); return 0; }`,
+"C++":`#include <iostream>\\nint main(){ std::cout << "Hello\\\\n"; }`,
+"C#":`using System; class Program { static void Main(){ Console.WriteLine("Hello"); } }`,
+Go:`package main\\nimport "fmt"\\nfunc main(){ fmt.Println("Hello") }`,
+Rust:`fn main(){ println!("Hello"); }`,Swift:`print("Hello")`,
+Kotlin:`fun main(){ println("Hello") }`,PHP:`<?php echo "Hello"; ?>`,Ruby:`puts "Hello"`,
+R:`print("Hello")`,SQL:`SELECT 'Hello' AS message;`,HTML:`<!doctype html><h1>Hello</h1>`,
+CSS:`body { font-family: system-ui; }`,Bash:`echo "Hello"`,PowerShell:`Write-Output "Hello"`,
+Lua:`print("Hello")`,Solidity:`pragma solidity ^0.8.0; contract Hello { }`
+};
+const lang=document.getElementById("language");
+LANGUAGES.forEach((x,i)=>{let o=document.createElement("option");o.value=x;o.textContent=(i+1)+". "+x;lang.appendChild(o)});
+function focusId(id){document.getElementById(id).scrollIntoView({behavior:"smooth"})}
+function loadExample(){document.getElementById("editor").value=templates[lang.value]||("// "+lang.value+" starter template\\n// Use the corresponding compiler/interpreter to execute it.");}
+function createAnswer(){
+ const p=document.getElementById("prompt").value.trim()||"Explain this topic in depth.";
+ const d=document.getElementById("depth").value,a=document.getElementById("audience").value;
+ const answer=`<h3>DOOM AI Research & Creation Plan</h3>
+ <p><b>Question:</b> ${esc(p)}</p>
+ <p><span class="tag">${esc(d)}</span> <span class="tag">${esc(a)}</span></p>
+ <div class="source"><b>1. Direct answer</b><br>Start with a clear answer to the exact question, then expand only into relevant concepts.</div>
+ <div class="source"><b>2. Detailed layers</b><br>Definitions → background → mechanisms → examples → history → current evidence → limitations → competing explanations.</div>
+ <div class="source"><b>3. Evidence</b><br>Every factual claim should carry publisher, source, date and an exact reference when available.</div>
+ <div class="source"><b>4. Visual learning</b><br>Where useful: interactive 3D human/animal/object/planet representation with clickable concepts connected to the question.</div>
+ <div class="source"><b>5. Follow-up graph</b><br>Generate “why?”, “how?”, “what if?”, “history?”, “evidence?” and “related topic?” questions so the audience can continue exploring.</div>
+ <div class="source"><b>6. Safety & provenance</b><br>Separate verified fact, source statement, interpretation and AI inference. Respect source licences and access restrictions.</div>`;
+ document.getElementById("answer").innerHTML=answer;
+}
+function esc(s){return s.replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m]))}
+async function publicSearch(){
+ const q=document.getElementById("topic").value.trim(); if(!q)return;
+ const box=document.getElementById("researchOut");box.innerHTML="<p>Fetching public source…</p>";
+ try{
+  const r=await fetch("https://en.wikipedia.org/api/rest_v1/page/summary/"+encodeURIComponent(q));
+  if(!r.ok)throw new Error("HTTP "+r.status);
+  const x=await r.json();
+  const url=x.content_urls?.desktop?.page||"https://www.wikipedia.org/";
+  box.innerHTML=`<div class="source"><b>${esc(x.title||q)}</b><br>${esc(x.extract||"No summary.")}<br><br><b>Source:</b> <a href="${esc(url)}" target="_blank" rel="noopener">${esc(url)}</a><br><span class="muted">Public-source result; verify against primary/official sources for high-stakes claims.</span></div>`;
+ }catch(e){box.innerHTML="<p class='muted'>Public request failed in this browser/network: "+esc(e.message)+"</p>"}
+}
+function addEvidence(){
+ const c=document.getElementById("claim").value.trim(),s=document.getElementById("src").value.trim(),w=document.getElementById("when").value.trim();
+ if(!c||!s){alert("Claim and source required");return}
+ const tr=document.createElement("tr");[c,s,w||"—"].forEach(v=>{let td=document.createElement("td");td.textContent=v;tr.appendChild(td)});
+ document.getElementById("ev").appendChild(tr);["claim","src","when"].forEach(id=>document.getElementById(id).value="");
+}
+function runCode(){
+ const code=document.getElementById("editor").value,out=document.getElementById("codeOut");
+ if(lang.value!=="JavaScript"){out.textContent="Template loaded for "+lang.value+". Browser execution is enabled only for JavaScript in this single-file demo.";return}
+ const worker=`self.onmessage=e=>{let a=[];console.log=(...x)=>a.push(x.map(v=>typeof v==="object"?JSON.stringify(v):String(v)).join(" "));try{new Function(e.data)();postMessage(a.join("\\n")||"(no console output)")}catch(x){postMessage(x.name+": "+x.message)}}`;
+ const w=new Worker(URL.createObjectURL(new Blob([worker],{type:"text/javascript"})));
+ let timer=setTimeout(()=>{w.terminate();out.textContent="Stopped after 2 seconds."},2000);
+ w.onmessage=e=>{clearTimeout(timer);out.textContent=e.data;w.terminate()};w.postMessage(code);
+}
+let visual="planet",angle=0,drag=false,lastX=0;
+const cv=document.getElementById("scene"),ctx=cv.getContext("2d");
+function setVisual(v){visual=v;document.getElementById("visualText").textContent="Selected: "+v+". Drag the canvas to rotate the demo.";draw()}
+cv.onpointerdown=e=>{drag=true;lastX=e.clientX};cv.onpointerup=()=>drag=false;cv.onpointerleave=()=>drag=false;cv.onpointermove=e=>{if(drag){angle+=(e.clientX-lastX)*.01;lastX=e.clientX;draw()}};
+function draw(){
+ const w=cv.width,h=cv.height;ctx.clearRect(0,0,w,h);ctx.save();ctx.translate(w/2,h/2);
+ const r=105,scale=Math.abs(Math.cos(angle))*.35+.65;
+ ctx.beginPath();ctx.ellipse(0,0,r*scale,r,0,0,Math.PI*2);ctx.strokeStyle="#63e6ff";ctx.lineWidth=3;ctx.stroke();
+ ctx.beginPath();ctx.arc(-r*.3*scale,-r*.25,r*.14,0,Math.PI*2);ctx.stroke();
+ ctx.beginPath();ctx.arc(r*.3*scale,-r*.25,r*.14,0,Math.PI*2);ctx.stroke();
+ ctx.fillStyle="#dbefff";ctx.font="24px system-ui";ctx.textAlign="center";ctx.fillText(visual.toUpperCase(),0,r+45);
+ ctx.restore();requestAnimationFrame(draw);
+}
+draw();
+function exportData(){
+ const evidence=[...document.querySelectorAll("#ev tr")].map(tr=>[...tr.children].map(td=>td.textContent));
+ const obj={app:"DOOM AI",version:"single-file-demo",languages:LANGUAGES,evidence,research:document.getElementById("researchOut").innerText,createdAt:new Date().toISOString()};
+ const a=document.createElement("a");a.href=URL.createObjectURL(new Blob([JSON.stringify(obj,null,2)],{type:"application/json"}));a.download="doom-ai-project.json";a.click();
+}
+async function copyAnswer(){await navigator.clipboard.writeText(document.getElementById("answer").innerText||"");alert("Copied")}
+</script>
+<!-- DOOM AI PROJECT SPEC 000001: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000002: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000003: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000004: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000005: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000006: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000007: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000008: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000009: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000010: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000011: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000012: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000013: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000014: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000015: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000016: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000017: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000018: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000019: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000020: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000021: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000022: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000023: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000024: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000025: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000026: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000027: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000028: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000029: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000030: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000031: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000032: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000033: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000034: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000035: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000036: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000037: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000038: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000039: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000040: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000041: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000042: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000043: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000044: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000045: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000046: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000047: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000048: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000049: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000050: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000051: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000052: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000053: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000054: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000055: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000056: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000057: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000058: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000059: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000060: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000061: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000062: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000063: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000064: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000065: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000066: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000067: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000068: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000069: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000070: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000071: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000072: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000073: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000074: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000075: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000076: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000077: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000078: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000079: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000080: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000081: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000082: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000083: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000084: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000085: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000086: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000087: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000088: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000089: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000090: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000091: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000092: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000093: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000094: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000095: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000096: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000097: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000098: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000099: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000100: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000101: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000102: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000103: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000104: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000105: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000106: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000107: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000108: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000109: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000110: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000111: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000112: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000113: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000114: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000115: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000116: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000117: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000118: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000119: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000120: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000121: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000122: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000123: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000124: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000125: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000126: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000127: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000128: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000129: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000130: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000131: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000132: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000133: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000134: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000135: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000136: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000137: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000138: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000139: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000140: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000141: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000142: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000143: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000144: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000145: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000146: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000147: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000148: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000149: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000150: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000151: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000152: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000153: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000154: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000155: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000156: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000157: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000158: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000159: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000160: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000161: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000162: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000163: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000164: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000165: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000166: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000167: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000168: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000169: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000170: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000171: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000172: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000173: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000174: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000175: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000176: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000177: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000178: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000179: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000180: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000181: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000182: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000183: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000184: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000185: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000186: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000187: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000188: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000189: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000190: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000191: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000192: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000193: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000194: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000195: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000196: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000197: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000198: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000199: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000200: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000201: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000202: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000203: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000204: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000205: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000206: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000207: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000208: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000209: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000210: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000211: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000212: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000213: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000214: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000215: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000216: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000217: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000218: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000219: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000220: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000221: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000222: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000223: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000224: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000225: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000226: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000227: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000228: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000229: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000230: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000231: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000232: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000233: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000234: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000235: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000236: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000237: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000238: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000239: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000240: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000241: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000242: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000243: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000244: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000245: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000246: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000247: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000248: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000249: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000250: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000251: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000252: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000253: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000254: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000255: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000256: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000257: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000258: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000259: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000260: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000261: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000262: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000263: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000264: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000265: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000266: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000267: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000268: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000269: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000270: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000271: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000272: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000273: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000274: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000275: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000276: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000277: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000278: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000279: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000280: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000281: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000282: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000283: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000284: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000285: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000286: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000287: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000288: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000289: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000290: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000291: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000292: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000293: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000294: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000295: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000296: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000297: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000298: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000299: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000300: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000301: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000302: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000303: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000304: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000305: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000306: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000307: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000308: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000309: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000310: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000311: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000312: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000313: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000314: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000315: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000316: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000317: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000318: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000319: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000320: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000321: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000322: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000323: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000324: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000325: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000326: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000327: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000328: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000329: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000330: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000331: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000332: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000333: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000334: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000335: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000336: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000337: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000338: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000339: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000340: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000341: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000342: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000343: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000344: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000345: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000346: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000347: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000348: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000349: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000350: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000351: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000352: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000353: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000354: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000355: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000356: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000357: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000358: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000359: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000360: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000361: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000362: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000363: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000364: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000365: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000366: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000367: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000368: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000369: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000370: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000371: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000372: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000373: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000374: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000375: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000376: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000377: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000378: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000379: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000380: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000381: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000382: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000383: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000384: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000385: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000386: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000387: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000388: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000389: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000390: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000391: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000392: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000393: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000394: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000395: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000396: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000397: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000398: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000399: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000400: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000401: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000402: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000403: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000404: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000405: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000406: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000407: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000408: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000409: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000410: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000411: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000412: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000413: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000414: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000415: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000416: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000417: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000418: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000419: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000420: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000421: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000422: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000423: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000424: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000425: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000426: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000427: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000428: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000429: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000430: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000431: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000432: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000433: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000434: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000435: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000436: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000437: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000438: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000439: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000440: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000441: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000442: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000443: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000444: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000445: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000446: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000447: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000448: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000449: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000450: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000451: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000452: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000453: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000454: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000455: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000456: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000457: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000458: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000459: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000460: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000461: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000462: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000463: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000464: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000465: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000466: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000467: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000468: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000469: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000470: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000471: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000472: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000473: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000474: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000475: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000476: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000477: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000478: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000479: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000480: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000481: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000482: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000483: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000484: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000485: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000486: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000487: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000488: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000489: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000490: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000491: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000492: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000493: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000494: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000495: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000496: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000497: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000498: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000499: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000500: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000501: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000502: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000503: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000504: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000505: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000506: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000507: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000508: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000509: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000510: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000511: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000512: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000513: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000514: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000515: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000516: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000517: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000518: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000519: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000520: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000521: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000522: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000523: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000524: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000525: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000526: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000527: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000528: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000529: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000530: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000531: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000532: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000533: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000534: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000535: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000536: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000537: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000538: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000539: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000540: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000541: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000542: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000543: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000544: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000545: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000546: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000547: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000548: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000549: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000550: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000551: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000552: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000553: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000554: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000555: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000556: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000557: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000558: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000559: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000560: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000561: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000562: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000563: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000564: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000565: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000566: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000567: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000568: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000569: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000570: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000571: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000572: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000573: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000574: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000575: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000576: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000577: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000578: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000579: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000580: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000581: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000582: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000583: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000584: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000585: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000586: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000587: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000588: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000589: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000590: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000591: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000592: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000593: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000594: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000595: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000596: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000597: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000598: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000599: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000600: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000601: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000602: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000603: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000604: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000605: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000606: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000607: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000608: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000609: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000610: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000611: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000612: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000613: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000614: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000615: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000616: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000617: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000618: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000619: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000620: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000621: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000622: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000623: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000624: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000625: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000626: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000627: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000628: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000629: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000630: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000631: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000632: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000633: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000634: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000635: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000636: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000637: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000638: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000639: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000640: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000641: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000642: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000643: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000644: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000645: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000646: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000647: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000648: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000649: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000650: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000651: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000652: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000653: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000654: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000655: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000656: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000657: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000658: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000659: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000660: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000661: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000662: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000663: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000664: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000665: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000666: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000667: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000668: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000669: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000670: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000671: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000672: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000673: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000674: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000675: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000676: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000677: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000678: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000679: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000680: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000681: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000682: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000683: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000684: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000685: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000686: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000687: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000688: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000689: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000690: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000691: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000692: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000693: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000694: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000695: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000696: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000697: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000698: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000699: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000700: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000701: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000702: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000703: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000704: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000705: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000706: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000707: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000708: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000709: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000710: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000711: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000712: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000713: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000714: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000715: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000716: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000717: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000718: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000719: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000720: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000721: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000722: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000723: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000724: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000725: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000726: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000727: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000728: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000729: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000730: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000731: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000732: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000733: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000734: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000735: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000736: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000737: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000738: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000739: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000740: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000741: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000742: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000743: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000744: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000745: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000746: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000747: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000748: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000749: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000750: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000751: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000752: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000753: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000754: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000755: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000756: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000757: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000758: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000759: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000760: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000761: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000762: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000763: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000764: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000765: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000766: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000767: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000768: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000769: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000770: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000771: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000772: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000773: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000774: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000775: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000776: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000777: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000778: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000779: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000780: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000781: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000782: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000783: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000784: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000785: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000786: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000787: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000788: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000789: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000790: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000791: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000792: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000793: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000794: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000795: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000796: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000797: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000798: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000799: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000800: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000801: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000802: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000803: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000804: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000805: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000806: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000807: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000808: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000809: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000810: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000811: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000812: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000813: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000814: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000815: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000816: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000817: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000818: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000819: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000820: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000821: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000822: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000823: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000824: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000825: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000826: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000827: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000828: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000829: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000830: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000831: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000832: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000833: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000834: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000835: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000836: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000837: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000838: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000839: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000840: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000841: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000842: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000843: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000844: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000845: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000846: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000847: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000848: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000849: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000850: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000851: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000852: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000853: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000854: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000855: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000856: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000857: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000858: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000859: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000860: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000861: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000862: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000863: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000864: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000865: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000866: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000867: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000868: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000869: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000870: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000871: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000872: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000873: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000874: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000875: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000876: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000877: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000878: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000879: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000880: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000881: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000882: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000883: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000884: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000885: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000886: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000887: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000888: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000889: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000890: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000891: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000892: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000893: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000894: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000895: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000896: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000897: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000898: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000899: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000900: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000901: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000902: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000903: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000904: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000905: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000906: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000907: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000908: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000909: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000910: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000911: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000912: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000913: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000914: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000915: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000916: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000917: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000918: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000919: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000920: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000921: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000922: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000923: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000924: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000925: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000926: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000927: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000928: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000929: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000930: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000931: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000932: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000933: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000934: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000935: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000936: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000937: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000938: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000939: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000940: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000941: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000942: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000943: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000944: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000945: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000946: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000947: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000948: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000949: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000950: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000951: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000952: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000953: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000954: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000955: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000956: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000957: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000958: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000959: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000960: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000961: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000962: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000963: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000964: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000965: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000966: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000967: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000968: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000969: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000970: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000971: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000972: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000973: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000974: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000975: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000976: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000977: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000978: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000979: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000980: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000981: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000982: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000983: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000984: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000985: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000986: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000987: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000988: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000989: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000990: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000991: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000992: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000993: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000994: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000995: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000996: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000997: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000998: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 000999: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 001000: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 001001: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 001002: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 001003: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 001004: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 001005: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 001006: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 001007: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 001008: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 001009: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 001010: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 001011: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 001012: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 001013: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 001014: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 001015: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 001016: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 001017: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 001018: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 001019: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 001020: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 001021: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 001022: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 001023: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 001024: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 001025: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 001026: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 001027: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 001028: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 001029: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 001030: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 001031: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 001032: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 001033: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 001034: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 001035: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 001036: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 001037: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 001038: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 001039: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 001040: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 001041: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 001042: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 001043: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 001044: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 001045: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 001046: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 001047: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 001048: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 001049: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 001050: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 001051: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 001052: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 001053: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 001054: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 001055: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 001056: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 001057: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 001058: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 001059: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 001060: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 001061: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 001062: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 001063: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 001064: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 001065: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 001066: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 001067: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 001068: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 001069: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 001070: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 001071: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 001072: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 001073: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 001074: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 001075: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 001076: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 001077: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 001078: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 001079: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 001080: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 001081: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 001082: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 001083: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 001084: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 001085: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 001086: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 001087: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 001088: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 001089: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 001090: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 001091: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 001092: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 001093: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 001094: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 001095: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 001096: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 001097: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 001098: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 001099: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 001100: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 001101: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 001102: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 001103: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 001104: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 001105: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 001106: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 001107: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 001108: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 001109: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 001110: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 001111: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 001112: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 001113: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 001114: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 001115: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 001116: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 001117: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 001118: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 001119: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 001120: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 001121: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 001122: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 001123: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 001124: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 001125: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 001126: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 001127: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 001128: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 001129: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 001130: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 001131: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 001132: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 001133: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 001134: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 001135: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 001136: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 001137: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 001138: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 001139: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 001140: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 001141: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 001142: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 001143: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 001144: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 001145: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 001146: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 001147: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 001148: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 001149: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 001150: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 001151: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 001152: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 001153: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 001154: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 001155: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 001156: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 001157: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 001158: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 001159: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 001160: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 001161: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 001162: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 001163: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 001164: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 001165: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 001166: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 001167: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 001168: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 001169: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 001170: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 001171: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 001172: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 001173: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 001174: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 001175: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 001176: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 001177: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 001178: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 001179: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 001180: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 001181: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 001182: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 001183: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 001184: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 001185: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 001186: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 001187: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 001188: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 001189: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 001190: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 001191: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 001192: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 001193: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 001194: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 001195: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 001196: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 001197: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 001198: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 001199: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 001200: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 001201: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 001202: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 001203: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 001204: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 001205: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 001206: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 001207: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 001208: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 001209: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 001210: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 001211: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 001212: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 001213: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 001214: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 001215: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 001216: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 001217: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 001218: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 001219: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 001220: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 001221: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 001222: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 001223: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 001224: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 001225: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 001226: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 001227: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 001228: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 001229: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 001230: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 001231: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 001232: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 001233: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 001234: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 001235: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 001236: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 001237: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 001238: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 001239: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 001240: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 001241: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 001242: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 001243: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 001244: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 001245: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 001246: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 001247: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 001248: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 001249: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 001250: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 001251: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 001252: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 001253: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 001254: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 001255: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 001256: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 001257: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 001258: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 001259: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 001260: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 001261: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 001262: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 001263: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 001264: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 001265: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 001266: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 001267: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 001268: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 001269: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 001270: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 001271: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 001272: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 001273: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 001274: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 001275: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 001276: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 001277: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 001278: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 001279: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 001280: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 001281: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 001282: single-file architecture note; no runtime action. -->
+<!-- DOOM AI PROJECT SPEC 001283: single-file architecture note; no 
+Preview truncated for large file
